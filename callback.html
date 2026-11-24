@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<title>Finish sign-in · Siar</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main>
+<div class="brand"><span class="dot"></span>Siar <span class="muted">by madebyrazeen</span></div>
+<h1>Almost done</h1>
+<div id="ok">
+<p>Copy this whole address and paste it into <b>Siar → Settings → TikTok</b>, then press <b>Finish sign-in</b>.</p>
+<div class="card">
+<textarea id="url" readonly></textarea>
+<button id="copy" type="button">Copy</button>
+<span id="done" class="muted" style="margin-left:10px"></span>
+</div>
+<p class="muted">This page doesn't save or send anything. The code in the address works once and expires in a few minutes.</p>
+</div>
+<div id="err" hidden class="card"><p>The sign-in was cancelled or failed: <span id="why"></span></p><p class="muted">Go back to Siar and click Connect again.</p></div>
+<script>
+  const q = new URLSearchParams(location.search);
+  if (q.get("error")) {
+    document.getElementById("ok").hidden = true;
+    document.getElementById("err").hidden = false;
+    document.getElementById("why").textContent = q.get("error_description") || q.get("error");
+  }
+  const box = document.getElementById("url");
+  box.value = location.href;
+  document.getElementById("copy").onclick = async () => {
+    box.select();
+    try { await navigator.clipboard.writeText(location.href); } catch { document.execCommand("copy"); }
+    document.getElementById("done").textContent = "Copied";
+  };
+</script>
+<footer class="muted"><a href="./">Home</a> · <a href="privacy.html">Privacy</a> · <a href="terms.html">Terms</a></footer>
+</main>
+</body>
+</html>
